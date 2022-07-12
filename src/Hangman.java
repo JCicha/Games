@@ -1,8 +1,8 @@
 import java.io.FileWriter;
 import java.util.Scanner;
 
+//Nie dzialające na ten moment: wychodzenie z programu, wpisywanie słowa do puli.
 public class Hangman {
-
     public static void main(String[] args) {
         while (true) {
             System.out.println("Witaj w grze wisielec! Co chcesz zrobic? (Wpisz numer operacji)\n " +
@@ -12,7 +12,7 @@ public class Hangman {
             System.out.println(userChoice);
             switch(userChoice) {
                 case 2: {
-                    System.out.println("Podaj słowo, które chcesz dodać do puli wyrazów. \n");
+                    System.out.println("Podaj słowo, które chcesz dodać do puli wyrazów.\n");
                     Scanner scan = new Scanner(System.in);
                     String userWord = scan.nextLine();
                     System.out.println(userWord);
@@ -33,5 +33,4 @@ public class Hangman {
             }
         }
     }
-
 }
