@@ -10,17 +10,14 @@ public class Hangman {
             List<String> words = new ArrayList<String>();
             while (line != null) {
                 String[] wordsLine = line.split(" ");
-                for (String word : wordsLine) {
-                    words.add(word);
-                }
+                words.addAll(Arrays.asList(wordsLine));
                 line = reader.readLine();
             }
             Random rand = new Random(System.currentTimeMillis());
             randomWord = words.get(rand.nextInt(words.size()));
-        } catch (Exception e) {//do naprawienia na konkretne przypadki
-            e.getStackTrace();
+        } catch (IOException e) {
+            e.getStackTrace(); //
         }
-
         return randomWord;
     }
     public static String hashingWord(int length){
@@ -33,27 +30,34 @@ public class Hangman {
         return hashWord;
     }
     public static void drawingHangman(int missed){
-        System.out.println("Literka nie trafiona");
-        System.out.println("  ____");
-        System.out.println("  |  |");
-        System.out.println("  |  O");
-        if (missed == 2) {
-            System.out.println("  |  |");
-        } else if (missed == 3) {
-            System.out.println("  | \\|");
-        } else if (missed >= 4) {
-            System.out.println("  | \\|/");
+        System.out.println(" -------");
+        System.out.println(" |     |");
+        if (missed >= 1) {
+            System.out.println(" O");
         }
-        if (missed == 5) {
-            System.out.println("  | /");
-        } else if (missed == 6) {
-            System.out.println("  | / \\");
+        if (missed >= 2) {
+            System.out.print("\\ ");
+            if (missed >= 3) {
+                System.out.println("/");
+            }
+            else {
+                System.out.println("");
+            }
         }
-        for (int k = 6 - missed; k > 0; k--) {
-            System.out.println("  |");
+        if (missed >= 4) {
+            System.out.println(" |");
         }
-        System.out.println("__|__");
-        System.out.println();
+        if (missed >= 5) {
+            System.out.print("/ ");
+            if (missed >= 6) {
+                System.out.println("\\");
+            }
+            else {
+                System.out.println("");
+            }
+        }
+        System.out.println("");
+        System.out.println("");
     }
 
     public static int guessingLetters(int length, String randomWord, String hashWord){
@@ -62,6 +66,7 @@ public class Hangman {
         int missed = 0;
         while (correct < length && missed < 9) {
             System.out.println("Podaj literke: ");
+//            drawingHangman();
             Scanner letter = new Scanner(System.in);
             char letterGuess = letter.nextLine().charAt(0);
             System.out.println(letterGuess);
@@ -76,10 +81,14 @@ public class Hangman {
                     correct++;
                 }
             }
+            hashWord = new String(hashed);
             if (found) {
                 System.out.println("Gratulacje literka trafiona");
+                System.out.println(hashWord);
             } else {
                 missed++;
+                System.out.println("Literka nie trafiona");
+                System.out.println(hashWord);
                 drawingHangman(missed);
             }
         }
@@ -118,17 +127,17 @@ public class Hangman {
             }
             br.close();
             fr.close();
-        } catch (Exception e) { //do naprawienia na konkretne przypadki
+        } catch (Exception e) {  // TODO do naprawienia na konkretne przypadki
             e.getStackTrace();
         }
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         while (true) {
-            System.out.println("Witaj w grze wisielec! Co chcesz zrobic? (Wpisz numer operacji)\n " + "1. Zagrac!\n 2. Dodac slowo do puli wyrazow. \n 3. Zakonczyc program.");
+            System.out.println("Witaj w grze wisielec! Co chcesz zrobic? (Wpisz numer operacji)\n "
+                    + "1. Zagrac!\n 2. Dodac slowo do puli wyrazow. \n 3. Zakonczyc program.");
             Scanner in = new Scanner(System.in);
             int userChoice = Integer.parseInt(in.nextLine());
-            System.out.println(userChoice);
             switch (userChoice) {
                 case 1: {
                     game();
