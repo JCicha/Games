@@ -18,8 +18,7 @@ public class Hangman {
         } catch (IOException e) {
             e.getStackTrace(); //
         }
-//        String randomized = randomWord.replaceAll("\\s","");
-//        Set<String> result = new HashSet<>(Arrays.asList(randomized.split("")));
+
         return randomWord;
 
     }
@@ -68,11 +67,13 @@ public class Hangman {
         System.out.println("");
     }
 
-    public static int guessingLetters(int length, String randomWord, String hashWord){
+    public static int guessingLetters(String randomWord, String hashWord){
         wordDraw();
         int correct = 0;
         int missed = 0;
-        while (correct < length && missed < 9) {
+        String randomized = randomWord.replaceAll("\\s","");
+        Set<String> result = new HashSet<>(Arrays.asList(randomized.split("")));
+        while (result.size() > 0 && missed < 6) {
             System.out.println("Podaj literke: ");
 //            drawingHangman();
             Scanner letter = new Scanner(System.in);
@@ -90,7 +91,8 @@ public class Hangman {
                 }
             }
             hashWord = new String(hashed);
-            if (found) {
+            if (found && result.contains(String.valueOf(letterGuess))) {
+                result.remove(String.valueOf(letterGuess));
                 System.out.println("Gratulacje literka trafiona");
                 System.out.println(hashWord);
             } else {
@@ -101,7 +103,7 @@ public class Hangman {
             }
         }
         System.out.println(hashWord);
-        if (correct == length) {
+        if (result.size() == 0) {
             System.out.println("Gratulacje slowo odganiete. Twoim slowem bylo: " + randomWord);
         } else {
             System.out.println("Tym razem się nie udało");
@@ -115,7 +117,7 @@ public class Hangman {
         int length = randomWord.length();
         //Showing "hashed" word to guess
         String hashWord = hashingWord(randomWord);
-        int missed = guessingLetters(length, randomWord, hashWord);
+        int missed = guessingLetters(randomWord, hashWord);
         drawingHangman(missed);
     }
 
@@ -153,7 +155,7 @@ public class Hangman {
                     addingWord();
                     break;  // TODO fajnie gdyby przechodzilo do menu znowu - dodac
                 } case 3: {
-                    break;
+                    return;
                 } default:
                     throw new IllegalStateException("Unexpected value: " + userChoice);
             }
