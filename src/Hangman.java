@@ -10,23 +10,31 @@ public class Hangman {
             List<String> words = new ArrayList<String>();
             while (line != null) {
                 String[] wordsLine = line.split(" ");
-                words.addAll(Arrays.asList(wordsLine));
+                words.addAll(Arrays.asList(line));
                 line = reader.readLine();
-            }
-            Random rand = new Random(System.currentTimeMillis());
+            } //odczytuje cały plik
+            Random rand = new Random(System.currentTimeMillis()); //losuje słowo
             randomWord = words.get(rand.nextInt(words.size()));
         } catch (IOException e) {
             e.getStackTrace(); //
         }
+//        String randomized = randomWord.replaceAll("\\s","");
+//        Set<String> result = new HashSet<>(Arrays.asList(randomized.split("")));
         return randomWord;
+
     }
-    public static String hashingWord(int length){
+    public static String hashingWord(String randomWord){
         wordDraw();
         String hashWord = "";
-        for (int i = 0; i < length; i++) {
-            hashWord = hashWord + "_";
+        for (int i = 0; i < randomWord.length(); i++) {
+            if (randomWord.charAt(i) == ' '){
+                hashWord += " ";
+            }
+            else {
+                hashWord += "_";
+            }
         }
-        System.out.println("Twoje slowo: " + hashWord + "\nGra rozpoczyna sie, mozesz pomylic się 7 razy.");
+        System.out.println("Twoje slowo: " + hashWord + "\nGra rozpoczyna sie, mozesz pomylic sie 7 razy.");
         return hashWord;
     }
     public static void drawingHangman(int missed){
@@ -106,7 +114,7 @@ public class Hangman {
         String randomWord = wordDraw();
         int length = randomWord.length();
         //Showing "hashed" word to guess
-        String hashWord = hashingWord(length);
+        String hashWord = hashingWord(randomWord);
         int missed = guessingLetters(length, randomWord, hashWord);
         drawingHangman(missed);
     }
@@ -115,7 +123,6 @@ public class Hangman {
         System.out.println("Podaj slowo, ktore chcesz dodac do puli wyrazow.\n");
         Scanner scan = new Scanner(System.in);
         String userWord = scan.nextLine();
-        System.out.println(userWord);
         try {
             File file = new File("Passwords.txt");
             FileWriter fr = new FileWriter(file, true);
@@ -141,14 +148,16 @@ public class Hangman {
             switch (userChoice) {
                 case 1: {
                     game();
+                    break;
                 } case 2: {
                     addingWord();
+                    break;  // TODO fajnie gdyby przechodzilo do menu znowu - dodac
                 } case 3: {
                     break;
                 } default:
                     throw new IllegalStateException("Unexpected value: " + userChoice);
             }
-            break;
+        // TODO nie wychodzi z programu xD
         }
     }
 }
