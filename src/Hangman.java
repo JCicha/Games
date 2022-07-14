@@ -2,6 +2,10 @@ import java.io.*;
 import java.util.*;
 
 public class Hangman {
+    public static boolean isLetter(char c) {
+        return (c >= 'a' && c <= 'z') ||
+                (c >= 'A' && c <= 'Z');
+    }
     public static String wordDraw(){
         String randomWord = null;
         try {
@@ -74,11 +78,17 @@ public class Hangman {
         String randomized = randomWord.replaceAll("\\s","");
         Set<String> result = new HashSet<>(Arrays.asList(randomized.split("")));
         while (result.size() > 0 && missed < 6) {
-            System.out.println("Podaj literke: ");
-//            drawingHangman();
+            char letterGuess;
             Scanner letter = new Scanner(System.in);
-            char letterGuess = letter.nextLine().charAt(0);
-            System.out.println(letterGuess);
+            while (true) {
+                System.out.println("Podaj literke: ");
+//            drawingHangman();
+                letterGuess = letter.nextLine().charAt(0);
+                if (isLetter(letterGuess)) {
+                    break;
+                }
+            }
+            //letter.close();
 
             boolean found = false;
             char[] rand = randomWord.toCharArray();
@@ -91,6 +101,7 @@ public class Hangman {
                 }
             }
             hashWord = new String(hashed);
+
             if (found && result.contains(String.valueOf(letterGuess))) {
                 result.remove(String.valueOf(letterGuess));
                 System.out.println("Gratulacje literka trafiona");
@@ -153,13 +164,12 @@ public class Hangman {
                     break;
                 } case 2: {
                     addingWord();
-                    break;  // TODO fajnie gdyby przechodzilo do menu znowu - dodac
+                    break;
                 } case 3: {
                     return;
                 } default:
                     throw new IllegalStateException("Unexpected value: " + userChoice);
             }
-        // TODO nie wychodzi z programu xD
         }
     }
 }
