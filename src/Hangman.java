@@ -110,8 +110,8 @@ public class Hangman {
                 missed++;
                 System.out.println("Literka nie trafiona");
                 System.out.println(hashWord);
-                drawingHangman(missed);
             }
+            drawingHangman(missed);
         }
         System.out.println(hashWord);
         if (result.size() == 0) {
@@ -147,7 +147,7 @@ public class Hangman {
             }
             br.close();
             fr.close();
-        } catch (Exception e) {  // TODO do naprawienia na konkretne przypadki
+        } catch (Exception e) {
             e.getStackTrace();
         }
     }
