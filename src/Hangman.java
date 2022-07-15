@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Hangman {
     public static boolean isLetter(char c) {
-        return (c >= 'a' && c <= 'z') ||
+        return (c >= 'a' && c <= 'z') ||  //Checking if char is a letter by using an ascii array
                 (c >= 'A' && c <= 'Z');
     }
     public static String wordDraw(){
@@ -16,8 +16,8 @@ public class Hangman {
                 String[] wordsLine = line.split(" ");
                 words.addAll(Arrays.asList(line));
                 line = reader.readLine();
-            } //odczytuje cały plik
-            Random rand = new Random(System.currentTimeMillis()); //losuje słowo
+            }  // reading through a whole file
+            Random rand = new Random(System.currentTimeMillis()); // drawing a word
             randomWord = words.get(rand.nextInt(words.size()));
         } catch (IOException e) {
             e.getStackTrace(); //
@@ -30,14 +30,14 @@ public class Hangman {
         wordDraw();
         String hashWord = "";
         for (int i = 0; i < randomWord.length(); i++) {
-            if (randomWord.charAt(i) == ' '){
+            if (randomWord.charAt(i) == ' '){  // checking if char in word is a space or not
                 hashWord += " ";
             }
             else {
                 hashWord += "_";
             }
         }
-        System.out.println("Twoje slowo: " + hashWord + "\nGra rozpoczyna sie, mozesz pomylic sie 7 razy.");
+        System.out.println("Twoje slowo to: " + hashWord + "\nGra rozpoczyna sie, mozesz pomylic sie 7 razy.");
         return hashWord;
     }
     public static void drawingHangman(int missed){
@@ -73,31 +73,28 @@ public class Hangman {
 
     public static int guessingLetters(String randomWord, String hashWord){
         wordDraw();
-        int correct = 0;
         int missed = 0;
-        String randomized = randomWord.replaceAll("\\s","");
-        Set<String> result = new HashSet<>(Arrays.asList(randomized.split("")));
+        String randomized = randomWord.replaceAll("\\s","");  // Deleting whitespaces
+        Set<String> result = new HashSet<>(Arrays.asList(randomized.split("")));  // Creating an array
+        // of letters in word without repeatition
         while (result.size() > 0 && missed < 6) {
             char letterGuess;
             Scanner letter = new Scanner(System.in);
             while (true) {
                 System.out.println("Podaj literke: ");
-//            drawingHangman();
                 letterGuess = letter.nextLine().charAt(0);
-                if (isLetter(letterGuess)) {
+                if (isLetter(letterGuess)) {  // Checking if char is letter
                     break;
                 }
             }
-            //letter.close();
 
             boolean found = false;
             char[] rand = randomWord.toCharArray();
             char[] hashed = hashWord.toCharArray();
             for (int i = 0; i < randomWord.length(); i++) {
-                if (rand[i] == letterGuess) {
+                if (rand[i] == letterGuess) {  // Is letter in our word?
                     hashed[i] = letterGuess;
                     found = true;
-                    correct++;
                 }
             }
             hashWord = new String(hashed);
@@ -105,11 +102,11 @@ public class Hangman {
             if (found && result.contains(String.valueOf(letterGuess))) {
                 result.remove(String.valueOf(letterGuess));
                 System.out.println("Gratulacje literka trafiona");
-                System.out.println(hashWord);
+                System.out.println("Twoje slowo: "+hashWord);
             } else {
                 missed++;
                 System.out.println("Literka nie trafiona");
-                System.out.println(hashWord);
+                System.out.println("Twoje slowo: "+hashWord);
             }
             drawingHangman(missed);
         }
@@ -117,7 +114,7 @@ public class Hangman {
         if (result.size() == 0) {
             System.out.println("Gratulacje slowo odganiete. Twoim slowem bylo: " + randomWord);
         } else {
-            System.out.println("Tym razem się nie udało");
+            System.out.println("Tym razem sie nie udalo. Powodzenia nastepnym razem");
         }
         return missed;
     }
@@ -150,6 +147,7 @@ public class Hangman {
         } catch (Exception e) {
             e.getStackTrace();
         }
+        System.out.println("Slowo zostalo dodane do puli wyrazow.\n");
     }
 
     public static void main(String[] args) {
