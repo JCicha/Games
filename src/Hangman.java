@@ -3,8 +3,13 @@ import java.util.*;
 
 public class Hangman {
     public static boolean isLetter(char c) {
-        return (c >= 'a' && c <= 'z') ||  //Checking if char is a letter by using an ascii array
-                (c >= 'A' && c <= 'Z');
+        //Checking if char is a letter by using an ascii array
+        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
+    }
+
+    public static boolean allLetters(String word){
+        return word.chars()
+                .allMatch(c -> isLetter((char) c));
     }
     public static String wordDraw(){
         String randomWord = null;
@@ -80,13 +85,11 @@ public class Hangman {
         while (result.size() > 0 && missed < 6) {
             char letterGuess;
             Scanner letter = new Scanner(System.in);
-            while (true) {
+            // Checking if char is letter
+            do {
                 System.out.println("Podaj literke: ");
                 letterGuess = letter.nextLine().charAt(0);
-                if (isLetter(letterGuess)) {  // Checking if char is letter
-                    break;
-                }
-            }
+            } while (!isLetter(letterGuess));
 
             boolean found = false;
             char[] rand = randomWord.toCharArray();
@@ -133,21 +136,27 @@ public class Hangman {
         System.out.println("Podaj slowo, ktore chcesz dodac do puli wyrazow.\n");
         Scanner scan = new Scanner(System.in);
         String userWord = scan.nextLine();
-        try {
-            File file = new File("Passwords.txt");
-            FileWriter fr = new FileWriter(file, true);
-            BufferedWriter br = new BufferedWriter(fr);
-            if (file.length() == 0) {
-                br.write(userWord);
-            } else {
-                br.write("\n" + userWord);
+        if(allLetters(userWord)){
+            try {
+                File file = new File("Passwords.txt");
+                FileWriter fr = new FileWriter(file, true);
+                BufferedWriter br = new BufferedWriter(fr);
+                if (file.length() == 0) {
+                    br.write(userWord);
+                } else {
+                    br.write("\n" + userWord);
+                }
+                br.close();
+                fr.close();
+            } catch (Exception e) {
+                e.getStackTrace();
             }
-            br.close();
-            fr.close();
-        } catch (Exception e) {
-            e.getStackTrace();
+            System.out.println("Slowo zostalo dodane do puli wyrazow.\n");
         }
-        System.out.println("Slowo zostalo dodane do puli wyrazow.\n");
+        else{
+            System.out.println("Slowo zawieralo niedozwolony znak. Sprobuj ponownie.\n");
+        }
+
     }
 
     public static void main(String[] args) {
@@ -155,18 +164,18 @@ public class Hangman {
             System.out.println("Witaj w grze wisielec! Co chcesz zrobic? (Wpisz numer operacji)\n "
                     + "1. Zagrac!\n 2. Dodac slowo do puli wyrazow. \n 3. Zakonczyc program.");
             Scanner in = new Scanner(System.in);
-            int userChoice = Integer.parseInt(in.nextLine());
+            String userChoice = in.nextLine().strip();
             switch (userChoice) {
-                case 1: {
+                case "1" -> {
                     game();
-                    break;
-                } case 2: {
+                }
+                case "2" -> {
                     addingWord();
-                    break;
-                } case 3: {
+                }
+                case "3" -> {
                     return;
-                } default:
-                    throw new IllegalStateException("Unexpected value: " + userChoice);
+                }
+                default -> throw new IllegalStateException("Unexpected value: " + userChoice);
             }
         }
     }
