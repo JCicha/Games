@@ -1,14 +1,14 @@
 import java.awt.*;
-import java.io.*;
 import java.util.*;
 
 public class Hangman {
     public static void game() {
         //Choosing random word from our file
-        String randomWord = PasswordService.wordDraw();
+        String randomWord = DbPasswords.getRandom();
+        assert randomWord != null;
         int length = randomWord.length();
         //Showing "hashed" word to guess
-        String hashWord = PasswordService.hashingWord(randomWord);
+        String hashWord = DbPasswords.hashingWord(randomWord);
         int missed = MenuGame.guessingLetters(randomWord, hashWord);
         MenuGame.drawingHangman(missed);
     }
@@ -24,7 +24,7 @@ public class Hangman {
                     game();
                 }
                 case "2" -> {
-                    PasswordService.addingWord();
+                    DbPasswords.addingWord();
                 }
                 case "3" -> {
                     return;

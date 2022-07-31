@@ -34,7 +34,7 @@ public class MenuGame {
     }
 
     public static int guessingLetters(String randomWord, String hashWord) {
-        PasswordService.wordDraw();
+        DaoPasswords.getPasswordsFromTheDb();
         int missed = 0;
         String randomized = randomWord.replaceAll("\\s", "");  // Deleting whitespaces
         Set<String> result = new HashSet<>(Arrays.asList(randomized.split("")));  // Creating an array
@@ -45,8 +45,14 @@ public class MenuGame {
             // Checking if char is letter
             do {
                 System.out.println("Podaj literke: ");
-                letterGuess = letter.nextLine().charAt(0);
-            } while (!PasswordService.isLetter(letterGuess));
+                String userInput = letter.nextLine();
+                if (userInput.strip().length() == 1){
+                    letterGuess = userInput.strip().charAt(0);
+                }
+                else {
+                    letterGuess = '1';
+                }
+            } while (!DbPasswords.isLetter(letterGuess));
 
             boolean found = false;
             char[] rand = randomWord.toCharArray();
